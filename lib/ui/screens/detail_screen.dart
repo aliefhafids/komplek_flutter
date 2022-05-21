@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import '../../models/komplek_model.dart';
@@ -12,25 +14,22 @@ class DetailScreen extends StatefulWidget {
 }
 
 class _DetailScreenState extends State<DetailScreen> {
-  Komplek? komplek;
+  late Future<Komplek> futureKomplek;
 
-  Future<Komplek?> getKomplek() async {
-    await http
-        .get(Uri.parse(
-            "http://192.168.0.106/komplekAPI/getKomplek.php?kode=${widget.code}"))
-        .then((response) {
-      if (jsonDecode(response.body) != null) {
-        setState(() {
-          komplek = Komplek.fromJson(jsonDecode(response.body));
-        });
-      }
-    });
-    return komplek;
+  Future<Komplek> getKomplek() async {
+    final response = await http.get(Uri.parse(
+        "http://192.168.0.106/komplekAPI/getKomplek.php?kode=${widget.code}"));
+
+    if (response.statusCode == 200) {
+      return Komplek.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Failed to load komplek');
+    }
   }
 
   @override
   void initState() {
-    getKomplek();
+    futureKomplek = getKomplek();
     super.initState();
   }
 
@@ -39,13 +38,16 @@ class _DetailScreenState extends State<DetailScreen> {
     return Scaffold(
       body: Center(
         child: Container(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text("Kode : ${komplek?.kode}", style: TextStyle(fontSize: 20)),
-              Text("Nama Komplek : ${komplek?.namaKomplek}",
-                  style: TextStyle(fontSize: 20)),
-            ],
+          child: FutureBuilder<Komplek>(
+            future: futureKomplek,
+            builder: (context, snapshot) {
+              if (snapshot.hasData) {
+                return Text(snapshot.data!.namaKomplek);
+              } else if (snapshot.hasError) {
+                return Text('${snapshot.error}');
+              }
+              return const CircularProgressIndicator();
+            },
           ),
         ),
       ),
