@@ -1,118 +1,107 @@
+
+  
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebasetest/services/auth_services.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
-void main() {
-  runApp(const MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
+class MainScreen extends StatefulWidget {
   @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      home: HomePage(),
-    );
-  }
+  _MainScreenState createState() => _MainScreenState();
 }
 
-class HomePage extends StatefulWidget {
-  const HomePage({Key? key}) : super(key: key);
+class _MainScreenState extends State<MainScreen> {
+  TextEditingController emailController = new TextEditingController();
+  TextEditingController passwordController = new TextEditingController();
 
-  @override
-  State<HomePage> createState() => _HomePageState();
-}
-
-class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: LoginScreen()); 
-  }
-}
-
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
-
-  @override
-  State<LoginScreen> createState() => _LoginScreenState();
-}
-
-class _LoginScreenState extends State<LoginScreen> {
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(16.0),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const Text(
-            "Komplek Scanner",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 28.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const Text(
-            "Login Ke Aplikasi",
-            style: TextStyle(
-              color: Colors.black,
-              fontSize: 44.0,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const SizedBox(
-            height: 44.0
-            ),
-          const TextField(
-            keyboardType: TextInputType.emailAddress,
-            decoration: const InputDecoration(
-              labelText: "Email",
-              hintText: "Masukkan Email Anda",
-              prefixIcon: Icon(Icons.email, color:Colors.black ,),
-            ),
-           ),
-           const SizedBox(
-            height: 26.0,
-           ),
-           const TextField(
-            keyboardType: TextInputType.text,
-            obscureText: true,
-            decoration: const InputDecoration(
-              labelText: "Password",
-              hintText: "Masukkan Password Anda",
-              prefixIcon: Icon(Icons.lock, color:Colors.black ,),
-            ),
-           ),
-            const SizedBox(
-              height: 12.0,
-            ),
-           Text("Lupa Password?", 
-           style: TextStyle(color: Colors.blue),
-           ),
-            const SizedBox(
-              height: 88.0,
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text("LOGIN / SIGN UP"),
+            Container(
+              margin: EdgeInsets.symmetric(horizontal: 50,),
+              child: TextFormField(
+                controller: emailController,
+                decoration: InputDecoration(
+                  hintText: "EMAIL...",
+                ),
+              ),
             ),
             Container(
-              width: double.infinity,
-              child: RawMaterialButton(
-                fillColor: Colors.blue,
-                elevation: 0.0,
-                padding: EdgeInsets.symmetric(vertical: 20.0),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12.0),
+              margin: EdgeInsets.symmetric(horizontal: 50,),
+              child: TextFormField(
+                controller: passwordController,
+                decoration: InputDecoration(
+                  hintText: "PASSWORD...",
                 ),
-                onPressed: () {},
-                child: Text(
-                  "Login",
-                   style: TextStyle(
-                     color: Colors.white,
-                     fontSize: 18.0)
-                     ,),),
-                     ),
-            
-        ],
+                obscureText: true,
+              ),
+            ),
+            Container(
+              height: 40,
+              width: MediaQuery.of(context).size.width / 3,
+              color: Colors.blue,
+              child: FlatButton(
+                onPressed: () {
+                  final String email = emailController.text.trim();
+                  final String password = passwordController.text.trim();
+
+                  if(email.isEmpty){
+                    print("Email is Empty");
+                  } else {
+                    if(password.isEmpty){
+                      print("Password is Empty");
+                    } else {
+                      context.read<AuthService>().login(
+                        email,
+                        password,
+                      );
+                    }
+                  }
+                },
+                child: Text("LOG IN"),
+              ),
+            ),
+            Container(
+              height: 40,
+              width: MediaQuery.of(context).size.width / 3,
+              color: Colors.red,
+              child: FlatButton(
+                onPressed: () {
+                  final String email = emailController.text.trim();
+                  final String password = passwordController.text.trim();
+
+                  if(email.isEmpty){
+                    print("Email is Empty");
+                  } else {
+                    if(password.isEmpty){
+                      print("Password is Empty");
+                    } else {
+                      context.read<AuthService>().signUp(
+                        email,
+                        password,
+                      ).then((value) async {
+                        User user = FirebaseAuth.instance.currentUser;
+
+                        await FirebaseFirestore.instance.collection("users").doc(user.uid).set({
+                          'uid': user.uid,
+                          'email': email,
+                          'password': password,
+                        });
+                      });
+                    }
+                  }
+                },
+                child: Text("SIGN UP"),
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
