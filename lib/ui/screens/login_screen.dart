@@ -2,16 +2,17 @@
   
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebasetest/services/auth_services.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-class MainScreen extends StatefulWidget {
+import '../services/auth_services.dart';
+
+class LoginScreen extends StatefulWidget {
   @override
-  _MainScreenState createState() => _MainScreenState();
+  _LoginScreenState createState() => _LoginScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class _LoginScreenState extends State<LoginScreen> {
   TextEditingController emailController = new TextEditingController();
   TextEditingController passwordController = new TextEditingController();
 
@@ -22,13 +23,13 @@ class _MainScreenState extends State<MainScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text("LOGIN / SIGN UP"),
+            Text("Please Sign-In"),
             Container(
               margin: EdgeInsets.symmetric(horizontal: 50,),
               child: TextFormField(
                 controller: emailController,
                 decoration: InputDecoration(
-                  hintText: "EMAIL...",
+                  hintText: "Email",
                 ),
               ),
             ),
@@ -37,7 +38,7 @@ class _MainScreenState extends State<MainScreen> {
               child: TextFormField(
                 controller: passwordController,
                 decoration: InputDecoration(
-                  hintText: "PASSWORD...",
+                  hintText: "Password",
                 ),
                 obscureText: true,
               ),
@@ -64,7 +65,7 @@ class _MainScreenState extends State<MainScreen> {
                     }
                   }
                 },
-                child: Text("LOG IN"),
+                child: Text("Log In"),
               ),
             ),
             Container(
@@ -86,10 +87,10 @@ class _MainScreenState extends State<MainScreen> {
                         email,
                         password,
                       ).then((value) async {
-                        User user = FirebaseAuth.instance.currentUser;
+                        User? user = FirebaseAuth.instance.currentUser;
 
-                        await FirebaseFirestore.instance.collection("users").doc(user.uid).set({
-                          'uid': user.uid,
+                        await FirebaseFirestore.instance.collection("users").doc(user?.uid).set({
+                          'uid': user?.uid,
                           'email': email,
                           'password': password,
                         });
@@ -97,7 +98,7 @@ class _MainScreenState extends State<MainScreen> {
                     }
                   }
                 },
-                child: Text("SIGN UP"),
+                child: Text("Sign Up"),
               ),
             ),
           ],
