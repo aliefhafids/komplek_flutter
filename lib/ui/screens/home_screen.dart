@@ -1,28 +1,37 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:flutter_barcode_scanner/flutter_barcode_scanner.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:news_flutter/ui/screens/detail_screen.dart';
 
-class MainScreen extends StatefulWidget {
-  const MainScreen({
-    Key ? key
-  }): super(key: key);
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
-  State < MainScreen > createState() => _MainScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _MainScreenState extends State < MainScreen > {
-  // String code = "";
-  // String getcode = "";
+class _HomeScreenState extends State<HomeScreen> {
+  Future<void> scanQR() async {
+    String result = "";
 
-  Future scanbarcode() async {
-    await FlutterBarcodeScanner.scanBarcode(
-        "#009922", "cancel", true, ScanMode.BARCODE)
-      .then((String kode) {
-        Navigator.push(
-          context, MaterialPageRoute(builder: (context) => DetailScreen(kode)));
-      });
+    try {
+      result = await FlutterBarcodeScanner.scanBarcode(
+          "#009922", "Cancel", false, ScanMode.BARCODE);
+    } catch (e) {
+      print("Error");
+    }
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+          builder: (context) => DetailScreen(
+                scanResult: result,
+              )),
+    );
+  }
+
+  @override
+  void initState() {
+    super.initState();
   }
 
   @override
@@ -34,23 +43,28 @@ class _MainScreenState extends State < MainScreen > {
         title: Text(
           'Komplek App',
           style:
-          GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 20),
+              GoogleFonts.montserrat(fontWeight: FontWeight.bold, fontSize: 20),
         ),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: < Widget > [
-            FlatButton(
+        child: GestureDetector(
+          onTap: () {
+            scanQR();
+          },
+          child: Container(
+            height: 50,
+            width: 120,
+            color: Color(0xFF6697BF),
+            child: const Center(
               child: Text(
-                'SCAN QRCODE',
-                style: GoogleFonts.montserrat(fontSize: 10),
+                "SCAN QRCODE",
+                style: TextStyle(
+                  color: Colors.white,
+                  fontFamily: "Montserrat",
+                ),
               ),
-              color: Colors.yellow,
-              onPressed: () {
-                scanbarcode();
-              }),
-          ],
+            ),
+          ),
         ),
       ),
     );
