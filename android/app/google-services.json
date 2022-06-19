@@ -1,0 +1,69 @@
+{
+  "project_info": {
+    "project_number": "67241644465",
+    "firebase_url": "https://flutter-komplek-default-rtdb.asia-southeast1.firebasedatabase.app",
+    "project_id": "flutter-komplek",
+    "storage_bucket": "flutter-komplek.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:67241644465:android:e0e68fe97bb809c6f9ad90",
+        "android_client_info": {
+          "package_name": "com.example.coba_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "67241644465-th152t7avbd0b99p54ambj58knhu08hv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASOQidda-nsFAMknp2O8QfUUBx8Ry9_aw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "67241644465-th152t7avbd0b99p54ambj58knhu08hv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:67241644465:android:6200845866c3e00af9ad90",
+        "android_client_info": {
+          "package_name": "com.example.news_flutter"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "67241644465-th152t7avbd0b99p54ambj58knhu08hv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyASOQidda-nsFAMknp2O8QfUUBx8Ry9_aw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "67241644465-th152t7avbd0b99p54ambj58knhu08hv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

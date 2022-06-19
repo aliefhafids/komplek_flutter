@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:news_flutter/ui/screens/maps_screen.dart';
 
 import 'home_screen.dart';
 
@@ -105,6 +106,31 @@ class _DetailScreenState extends State<DetailScreen> {
                       child: const Center(
                         child: Text(
                           "Check Out",
+                          style: TextStyle(
+                            color: Colors.white,
+                            fontFamily: "Montserrat",
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  
+                  const SizedBox(height: 20),
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => MapsScreen()),
+                      );
+                    },
+                    child: Container(
+                      height: 50,
+                      width: 120,
+                      color: Color(0xFF6697BF),
+                      child: const Center(
+                        child: Text(
+                          "Maps",
                           style: TextStyle(
                             color: Colors.white,
                             fontFamily: "Montserrat",
